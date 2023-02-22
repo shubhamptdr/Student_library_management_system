@@ -39,8 +39,10 @@ public class TransactionService {
 
         Transactions transactions = new Transactions();
         transactions.setTransactionStatus(TransactionStatus.PENDING);
+        transactions.setIssuedOperation(true);
         transactions.setBook(book);
         transactions.setCard(card);
+
 
         if(book == null || !book.isAvailable()){
             transactions.setTransactionStatus(TransactionStatus.FAILED);
@@ -56,16 +58,17 @@ public class TransactionService {
 
         transactions.setTransactionStatus(TransactionStatus.SUCCESS);
 
-
+        // update issuedBook for card
         List<Book> issuedBook = card.getBooksIssued();
         issuedBook.add(book);
         card.setBooksIssued(issuedBook);
 
-
+        // update in listOfCard for book
         List<Card> cardList = book.getListOfCards();
         cardList.add(card);
         book.setListOfCards(cardList);
 
+        //update in listOfTransaction for card
         List<Transactions> listOfTransactionForCard = card.getListOfTransaction();
         listOfTransactionForCard.add(transactions);
         card.setListOfTransaction(listOfTransactionForCard);
@@ -110,12 +113,14 @@ public class TransactionService {
 
         transactions.setTransactionStatus(TransactionStatus.SUCCESS);
 
+        // update issuedBook for card
         List<Book> issuedBook = card.getBooksIssued();
         issuedBook.remove(book);
         card.setBooksIssued(issuedBook);
 
         System.out.println("level 4");
 
+        // fine calculation
         Transactions currTrans = transactionRepository.findByBookAndCard(bookId,cardId);
         Date dateBefore = currTrans.getTransactionDate();
         Date datAfter = new Date();
@@ -131,9 +136,11 @@ public class TransactionService {
 
         System.out.println("level 5");
 
+        // update listOfTransaction for card
         List<Transactions> listOfTransactionForCard = card.getListOfTransaction();
         listOfTransactionForCard.add(transactions);
         card.setListOfTransaction(listOfTransactionForCard);
+
         book.setNoOfBookAvailable(book.getNoOfBookAvailable()+1);
 
         System.out.println("level 6");
@@ -173,11 +180,23 @@ public class TransactionService {
             transactionByCardIdResponseDto.setTransactionDate(transactions.getTransactionDate());
             transactionByCardIdResponseDto.setId(transactions.getId());
             transactionByCardIdResponseDto.setFine(transactions.getFine());
-            transactionByCardIdResponseDto.setBookId(transactions.getBook().getId());
-            transactionByCardIdResponseDto.setCardId(transactions.getCard().getId());
             transactionByCardIdResponseDto.setTransactionStatus(transactions.getTransactionStatus().toString());
             transactionByCardIdResponseDto.setTransactionId(transactions.getTransactionId());
 
+            Book book = transactions.getBook();
+            Card card = transactions.getCard();
+
+            if(book == null){
+                transactionByCardIdResponseDto.setBookId(0);
+            }else{
+                transactionByCardIdResponseDto.setBookId(transactions.getBook().getId());
+            }
+
+            if(card == null){
+                transactionByCardIdResponseDto.setCardId(0);
+            }else {
+                transactionByCardIdResponseDto.setCardId(transactions.getCard().getId());
+            }
 
             transactionByCardIdResponseDtoList.add(transactionByCardIdResponseDto);
         }

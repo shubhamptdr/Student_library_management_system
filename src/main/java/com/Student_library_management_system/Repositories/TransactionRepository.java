@@ -10,4 +10,6 @@ public interface TransactionRepository extends JpaRepository<Transactions,Intege
     @Query(value ="select sum(fine) from  transactions where  card_id=:cardId" ,nativeQuery = true )
     int findFineByCardId(int cardId);
 
+    @Query(value = "select * from  transactions where book_id=:bookId and  card_id=:cardId",nativeQuery = true)
+    Transactions findByBookAndCard(int bookId, int cardId);
 }

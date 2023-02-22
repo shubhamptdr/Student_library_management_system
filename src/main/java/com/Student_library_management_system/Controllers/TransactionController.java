@@ -34,4 +34,14 @@ public class TransactionController {
     }
 
 
+    @GetMapping("/getTransactionsByCardId")
+    public List<TransactionByCardIdResponseDto> getTransactionsByCardId(@RequestParam int cardId){
+        return transactionService.getTransactionsByCardId(cardId);
+    }
+
+    @GetMapping("/getAllTransaction")
+    public List<TransactionByCardIdResponseDto> getAllTransaction(){
+        return transactionService.getAllTransaction();
+    }
+
 }

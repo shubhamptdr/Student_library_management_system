@@ -2,6 +2,7 @@ package com.Student_library_management_system.Services;
 
 import com.Student_library_management_system.DTOs.requests.IssueBookRequestDto;
 import com.Student_library_management_system.DTOs.requests.ReturnBookRequestDto;
+import com.Student_library_management_system.DTOs.responses.TransactionByCardIdResponseDto;
 import com.Student_library_management_system.Enums.CardStatus;
 import com.Student_library_management_system.Enums.TransactionStatus;
 import com.Student_library_management_system.Models.Book;
@@ -13,6 +14,7 @@ import com.Student_library_management_system.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -140,4 +142,45 @@ public class TransactionService {
         return "book returned successfully and fine: Rs " + transactions.getFine()+"/-.";
     }
 
+
+    public List<TransactionByCardIdResponseDto> getTransactionsByCardId(int cardId) {
+        Card card = cardRepository.findById(cardId).get();
+        List<Transactions> transactionsList = card.getListOfTransaction();
+        List<TransactionByCardIdResponseDto> transactionByCardIdResponseDtoList = new ArrayList<>();
+
+        for (Transactions transactions : transactionsList){
+            TransactionByCardIdResponseDto transactionByCardIdResponseDto = new TransactionByCardIdResponseDto();
+            transactionByCardIdResponseDto.setTransactionDate(transactions.getTransactionDate());
+            transactionByCardIdResponseDto.setId(transactions.getId());
+            transactionByCardIdResponseDto.setFine(transactions.getFine());
+            transactionByCardIdResponseDto.setBookId(transactions.getBook().getId());
+            transactionByCardIdResponseDto.setCardId(transactions.getCard().getId());
+            transactionByCardIdResponseDto.setTransactionStatus(transactions.getTransactionStatus().toString());
+            transactionByCardIdResponseDto.setTransactionId(transactions.getTransactionId());
+
+
+            transactionByCardIdResponseDtoList.add(transactionByCardIdResponseDto);
+        }
+        return transactionByCardIdResponseDtoList;
+    }
+
+    public List<TransactionByCardIdResponseDto> getAllTransaction() {
+        List<Transactions> transactionsList = transactionRepository.findAll();
+        List<TransactionByCardIdResponseDto> transactionByCardIdResponseDtoList = new ArrayList<>();
+
+        for (Transactions transactions : transactionsList){
+            TransactionByCardIdResponseDto transactionByCardIdResponseDto = new TransactionByCardIdResponseDto();
+            transactionByCardIdResponseDto.setTransactionDate(transactions.getTransactionDate());
+            transactionByCardIdResponseDto.setId(transactions.getId());
+            transactionByCardIdResponseDto.setFine(transactions.getFine());
+            transactionByCardIdResponseDto.setBookId(transactions.getBook().getId());
+            transactionByCardIdResponseDto.setCardId(transactions.getCard().getId());
+            transactionByCardIdResponseDto.setTransactionStatus(transactions.getTransactionStatus().toString());
+            transactionByCardIdResponseDto.setTransactionId(transactions.getTransactionId());
+
+
+            transactionByCardIdResponseDtoList.add(transactionByCardIdResponseDto);
+        }
+        return transactionByCardIdResponseDtoList;
+    }
 }

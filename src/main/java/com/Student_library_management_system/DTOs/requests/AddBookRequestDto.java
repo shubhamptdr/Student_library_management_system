@@ -1,4 +1,4 @@
-package com.Student_library_management_system.DTOs;
+package com.Student_library_management_system.DTOs.requests;
 
 import com.Student_library_management_system.Enums.Genre;
 import lombok.AllArgsConstructor;

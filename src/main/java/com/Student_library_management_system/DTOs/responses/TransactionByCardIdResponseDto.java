@@ -13,19 +13,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionByCardIdResponseDto {
+
     private int id;
-
     private String transactionStatus;
-
     private int fine;
-
     private String transactionId;
-
     private Date transactionDate;
 
     private boolean isIssuedOperation;
     private int bookId;
     private int cardId;
-
 
 }

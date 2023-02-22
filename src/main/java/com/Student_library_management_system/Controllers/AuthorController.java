@@ -16,7 +16,7 @@ public class AuthorController {
     @Autowired
     private AuthorService authorService;
 
-    @GetMapping("/getAllAuthor")
+    @GetMapping("/get-authors")
     public List<AuthorResponseDto> getAllAuthor(){
         return authorService.getAllAuthor();
     }

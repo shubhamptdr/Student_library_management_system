@@ -13,9 +13,9 @@ import lombok.Setter;
 public class BookResponseDto {
     private int id;
     private String name;
-    private int quantity;
     private Genre genre;
-    private int noOfBookAvailable;
-    private boolean isAvailable;
     private int authorId;
+    private boolean isAvailable;
+    private int quantity;
+    private int noOfBookAvailable;
 }

@@ -1,6 +1,5 @@
 package com.Student_library_management_system.Controllers;
 
-import com.Student_library_management_system.DTOs.requests.AddBookRequestDto;
 import com.Student_library_management_system.DTOs.requests.AddStudentRequestDto;
 import com.Student_library_management_system.DTOs.requests.StudentUpdateMobRequestDto;
 import com.Student_library_management_system.DTOs.responses.StudentResponseDto;
@@ -21,13 +20,17 @@ public class StudentController {
         return studentService.createStudent(addStudentRequestDto);
     }
 
-
-    @GetMapping("/get_user/{email}")
-    public String getByEmail(@PathVariable String email){
-        return studentService.getByEmail(email);
+    @GetMapping("/get-student-by-email")
+    public StudentResponseDto getStudentByEmail(@RequestParam String email){
+        return studentService.getStudentByEmail(email);
     }
 
-    @GetMapping("/getAllStudent")
+    @GetMapping("/get-student-by-cardId")
+    public StudentResponseDto getStudentByCardId(@RequestParam int cardId){
+        return studentService.getStudentByCardId(cardId);
+    }
+
+    @GetMapping("/get-all-student")
     public List<StudentResponseDto> getAllStudent(){
         return studentService.getAllStudent();
     }
@@ -36,5 +39,7 @@ public class StudentController {
     public String updateMobileNo(@RequestBody StudentUpdateMobRequestDto studentUpdateMobRequestDto){
         return studentService.updateMobileNo(studentUpdateMobRequestDto);
     }
+
+
 
 }

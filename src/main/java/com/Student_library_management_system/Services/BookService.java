@@ -96,4 +96,9 @@ public class BookService {
 
         return bookByAuthorIdResponseDtoList;
     }
+
+    public String deleteBookById(int bookId) {
+
+        return "Book deleted successfully";
+    }
 }

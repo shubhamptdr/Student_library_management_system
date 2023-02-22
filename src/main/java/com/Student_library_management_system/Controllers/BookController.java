@@ -19,15 +19,20 @@ public class BookController {
         return bookService.createBook(addBookRequestDto);
     }
 
-    @GetMapping("/getAllBook")
+    @GetMapping("/get-books")
     public List<BookResponseDto> getAllBook(){
         return bookService.getAllBook();
     }
 
 
-    @GetMapping("/getBookByAuthorId")
+    @GetMapping("/get-books-by-author")
     public List<BookByAuthorIdResponseDto> getBookByAuthorId(@RequestParam int authorId){
         return bookService.getBookByAuthorId(authorId);
+    }
+
+    @DeleteMapping("/delete-book")
+    public String deleteBookById(@RequestParam int bookId){
+        return bookService.deleteBookById(bookId);
     }
 
 }

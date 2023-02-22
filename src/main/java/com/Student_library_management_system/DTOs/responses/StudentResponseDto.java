@@ -11,16 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StudentResponseDto {
     private int id;
-
+    private int cardId;
     private String name;
-
     private String email;
-
     private String mobNo;
-
     private String country;
-
     private int age;
 
-    private int cardId;
 }

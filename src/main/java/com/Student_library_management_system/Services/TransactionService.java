@@ -95,20 +95,18 @@ public class TransactionService {
 
         Transactions transactions = new Transactions();
         transactions.setTransactionStatus(TransactionStatus.PENDING);
-        System.out.println("level 1");
+
         if(book == null ){
             transactions.setTransactionStatus(TransactionStatus.FAILED);
             transactionRepository.save(transactions);
             throw new Exception("Enter wrong bookId");
         }
-        System.out.println("level 2");
 
         if(card == null || card.getCardStatus() != CardStatus.ACTIVATED){
             transactions.setTransactionStatus(TransactionStatus.FAILED);
             transactionRepository.save(transactions);
             throw new Exception("Enter wrong cardId");
         }
-        System.out.println("level 3");
 
 
         transactions.setTransactionStatus(TransactionStatus.SUCCESS);
@@ -118,7 +116,11 @@ public class TransactionService {
         issuedBook.remove(book);
         card.setBooksIssued(issuedBook);
 
-        System.out.println("level 4");
+        List<Card> cardList = book.getListOfCards();
+        cardList.remove(card);
+        book.setListOfCards(cardList);
+
+
 
         // fine calculation
         Transactions currTrans = transactionRepository.findByBookAndCard(bookId,cardId);
@@ -134,7 +136,6 @@ public class TransactionService {
             transactions.setFine(fine);
         }
 
-        System.out.println("level 5");
 
         // update listOfTransaction for card
         List<Transactions> listOfTransactionForCard = card.getListOfTransaction();
@@ -143,7 +144,6 @@ public class TransactionService {
 
         book.setNoOfBookAvailable(book.getNoOfBookAvailable()+1);
 
-        System.out.println("level 6");
         cardRepository.save(card);
 
         return "book returned successfully and fine: Rs " + transactions.getFine()+"/-.";

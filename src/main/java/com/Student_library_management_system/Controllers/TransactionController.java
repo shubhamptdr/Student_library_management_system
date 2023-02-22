@@ -15,7 +15,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping("/issueBook")
+    @PostMapping("/issue-book")
     public String issueBook(@RequestBody IssueBookRequestDto issueBookRequestDto){
         try {
             return transactionService.issueBook(issueBookRequestDto);
@@ -24,7 +24,7 @@ public class TransactionController {
         }
     }
 
-    @PostMapping("/returnBook")
+    @PostMapping("/return-book")
     public String returnBook(@RequestBody ReturnBookRequestDto returnBookRequestDto){
         try {
             return transactionService.returnBook(returnBookRequestDto);
@@ -34,12 +34,12 @@ public class TransactionController {
     }
 
 
-    @GetMapping("/getTransactionsByCardId")
+    @GetMapping("/get-transactions-by-card")
     public List<TransactionByCardIdResponseDto> getTransactionsByCardId(@RequestParam int cardId){
         return transactionService.getTransactionsByCardId(cardId);
     }
 
-    @GetMapping("/getAllTransaction")
+    @GetMapping("/get-transactions")
     public List<TransactionByCardIdResponseDto> getAllTransaction(){
         return transactionService.getAllTransaction();
     }

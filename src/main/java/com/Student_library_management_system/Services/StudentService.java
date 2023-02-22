@@ -1,5 +1,6 @@
 package com.Student_library_management_system.Services;
 
+import com.Student_library_management_system.DTOs.requests.AddStudentRequestDto;
 import com.Student_library_management_system.DTOs.requests.StudentUpdateMobRequestDto;
 import com.Student_library_management_system.DTOs.responses.StudentResponseDto;
 import com.Student_library_management_system.Enums.CardStatus;
@@ -17,15 +18,25 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public String createStudent( Student student){
+    public String createStudent( AddStudentRequestDto addStudentRequestDto){
 
 
         //card should be auto generated when createStudent function is called
         try {
+            // create student entity
+            Student student = new Student();
+            student.setName(addStudentRequestDto.getName());
+            student.setAge(addStudentRequestDto.getAge());
+            student.setCountry(addStudentRequestDto.getCountry());
+            student.setMobNo(addStudentRequestDto.getMobNo());
+            student.setEmail(addStudentRequestDto.getEmail());
+
+            // create card entity
             Card card = new Card();
             card.setCardStatus(CardStatus.ACTIVATED);
             card.setStudentVariableName(student);
 
+            //by cascading effect, child will automatically be saved.
             //for student
             student.setCard(card);
             studentRepository.save(student);
@@ -33,7 +44,6 @@ public class StudentService {
         }catch (Exception e){
             return "Student already exist " + e.toString();
         }
-        //by cascading effect, child will automatically be saved.
 
         return "Student and card added successfully";
     }

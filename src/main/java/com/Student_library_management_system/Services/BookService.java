@@ -49,9 +49,9 @@ public class BookService {
         currentBooksWritten.add(book);
         author.setBooksWritten(currentBooksWritten);
 
-        for(Book book1:author.getBooksWritten()){
-            System.out.println(book1.getName());
-        }
+//        for(Book book1:author.getBooksWritten()){
+//            System.out.println(book1.getName());
+//        }
 
         // book is to be saved but also author
         authorRepository.save(author);

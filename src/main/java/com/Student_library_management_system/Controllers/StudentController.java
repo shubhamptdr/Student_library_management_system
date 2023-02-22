@@ -1,8 +1,9 @@
 package com.Student_library_management_system.Controllers;
 
+import com.Student_library_management_system.DTOs.requests.AddBookRequestDto;
+import com.Student_library_management_system.DTOs.requests.AddStudentRequestDto;
 import com.Student_library_management_system.DTOs.requests.StudentUpdateMobRequestDto;
 import com.Student_library_management_system.DTOs.responses.StudentResponseDto;
-import com.Student_library_management_system.Models.Student;
 import com.Student_library_management_system.Services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/add")
-    public String createStudent(@RequestBody Student student){
-        return studentService.createStudent(student);
+    public String createStudent(@RequestBody AddStudentRequestDto addStudentRequestDto){
+        return studentService.createStudent(addStudentRequestDto);
     }
 
 

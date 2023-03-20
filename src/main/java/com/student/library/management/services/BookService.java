@@ -55,10 +55,10 @@ public class BookService {
                 .build();
 
 
-        // we need to update list of booksWritten in parent class
-        author.getBooksWritten().add(book);
-        authorRepository.save(author);
-
+//        // we need to update list of booksWritten in parent class
+//        author.getBooksWritten().add(book);
+//        authorRepository.save(author);
+//
 
         bookRepository.save(book);
 

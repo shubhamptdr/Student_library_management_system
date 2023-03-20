@@ -48,11 +48,11 @@ public class TransactionService {
         Transaction transaction = Transaction.builder()
                 .transactionStatus(TransactionStatus.PENDING)
                 .transactionId(UUID.randomUUID().toString())
-                .isIssuedOperation(true)
                 .book(book)
                 .card(card)
                 .build();
-
+t
+        transaction.setIssuedOperation(true);
 
         if(!book.isAvailable()){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
@@ -68,14 +68,10 @@ public class TransactionService {
 
         transaction.setTransactionStatus(TransactionStatus.SUCCESS);
 
-//        // update issuedBook for card
-//        card.getBooksIssued().add(book);
-//
-//        // update in listOfCard for book
-//        book.getListOfCards().add(card);
-//
-//        //update in listOfTransaction for card
-//        card.getListOfTransaction().add(transaction);
+        // update attr. for mapped entity because we have to remove later to
+        card.getBooksIssued().add(book);
+        book.getListOfCards().add(card);
+
 
         book.setNoOfBookAvailable(book.getNoOfBookAvailable()-1);
 
@@ -103,7 +99,7 @@ public class TransactionService {
         transaction.setTransactionId(UUID.randomUUID().toString());
 
 
-        if(card == null || card.getCardStatus() != CardStatus.ACTIVATED){
+        if(card.getCardStatus() != CardStatus.ACTIVATED){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
             transactionRepository.save(transaction);
             throw new CardNotFoundException("Enter wrong cardId");
@@ -111,10 +107,16 @@ public class TransactionService {
 
 
         transaction.setTransactionStatus(TransactionStatus.SUCCESS);
+        transaction.setBook(book);
+        transaction.setCard(card);
 
-        // update issuedBook for card
-        card.getBooksIssued().remove(book);
-        book.getListOfCards().remove(card);
+        // update bookList for card & book
+        if(card.getBooksIssued().contains(book) && book.getListOfCards().contains(card)){
+         card.getBooksIssued().remove(book);
+         book.getListOfCards().remove(card);
+        }else{
+            throw new BookNotFoundException("Book already returned");
+        }
 
 
         // fine calculation
@@ -129,13 +131,12 @@ public class TransactionService {
             transaction.setFine(fine);
         }
 
-        // update listOfTransaction for card
-        card.getListOfTransaction().add(transaction);
+
 
         book.setNoOfBookAvailable(book.getNoOfBookAvailable()+1);
+        book.setAvailable(true);
 
-        cardRepository.save(card);
-
+        transactionRepository.save(transaction);
         return "book returned successfully and fine: Rs " + transaction.getFine()+"/-.";
     }
 

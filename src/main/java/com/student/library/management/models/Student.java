@@ -27,7 +27,7 @@ public class Student {
     private int age;
 
     //bidirectional mapping
-    @OneToOne(mappedBy = "studentVariableName",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "student",cascade = CascadeType.ALL)
     private Card card;
 
 }

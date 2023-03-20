@@ -7,10 +7,10 @@ import com.student.library.management.models.Student;
 public class StudentConvertor {
     public static Student convertDtoToEntity(AddStudentRequestDto addStudentRequestDto){
         return Student.builder()
-                .name(addStudentRequestDto.getName())
+                .name(addStudentRequestDto.getName().toLowerCase())
                 .age(addStudentRequestDto.getAge())
                 .email(addStudentRequestDto.getEmail())
-                .country(addStudentRequestDto.getCountry())
+                .country(addStudentRequestDto.getCountry().toLowerCase())
                 .mobNo(addStudentRequestDto.getMobNo())
                 .build();
     }

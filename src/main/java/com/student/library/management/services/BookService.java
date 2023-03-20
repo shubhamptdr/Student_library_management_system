@@ -1,60 +1,66 @@
 package com.student.library.management.services;
 
 import com.student.library.management.convertor.BookConvertor;
-import com.student.library.management.dtos.requests.AddBookRequestDto;
+import com.student.library.management.dtos.requests.bookRequestDto;
 import com.student.library.management.exceptions.AuthorNotFoundException;
+import com.student.library.management.exceptions.CardNotFoundException;
 import com.student.library.management.models.Book;
+import com.student.library.management.models.Card;
 import com.student.library.management.repositories.AuthorRepository;
 import com.student.library.management.dtos.responses.BookResponseDto;
 import com.student.library.management.models.Author;
 import com.student.library.management.repositories.BookRepository;
+import com.student.library.management.repositories.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
     @Autowired
     private AuthorRepository authorRepository;
+
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private CardRepository cardRepository;
 
-    public String createBook(AddBookRequestDto addBookRequestDto) throws AuthorNotFoundException {
+    public String createBook(bookRequestDto bookRequestDto) throws AuthorNotFoundException {
         // fetch author
-        Author author = authorRepository.findByName(addBookRequestDto.getAuthorName());
+        List<Author> authorList = authorRepository.findByName(bookRequestDto.getAuthorName().toLowerCase());
 
-        if (author == null) {
-            throw new AuthorNotFoundException(addBookRequestDto.getAuthorName());
+        if (authorList.isEmpty()) {
+            throw new AuthorNotFoundException(bookRequestDto.getAuthorName());
         }
 
-        // create entity
-        author = Author.builder()
-                .name(addBookRequestDto.getAuthorName())
-                .rating(addBookRequestDto.getAuthorRating())
-                .country(addBookRequestDto.getCountry())
-                .build();
+        Optional<Author> result = authorList.stream()
+                .filter(author -> author.getCountry().equals(bookRequestDto.getCountry().toLowerCase()))
+                .findFirst();
+
+        Author author = result.orElseThrow(() -> new AuthorNotFoundException("No author found for country " + bookRequestDto.getCountry()));
+
 
         // create book entity
         Book book = Book.builder()
-                .name(addBookRequestDto.getBookName())
-                .quantity(addBookRequestDto.getQuantity())
-                .genre(addBookRequestDto.getGenre())
-                .noOfBookAvailable(addBookRequestDto.getQuantity())
+                .name(bookRequestDto.getBookName())
+                .quantity(bookRequestDto.getQuantity())
+                .genre(bookRequestDto.getGenre())
+                .noOfBookAvailable(bookRequestDto.getQuantity())
                 .isAvailable(true)
                 .author(author)
                 .build();
 
 
         // we need to update list of booksWritten in parent class
-        List<Book> currentBooksWritten = author.getBooksWritten();
-        currentBooksWritten.add(book);
-        author.setBooksWritten(currentBooksWritten);
-
-        // book is to be saved but also author
+        author.getBooksWritten().add(book);
         authorRepository.save(author);
+
+
+        bookRepository.save(book);
 
         return "Book-Author added successfully";
     }
@@ -86,5 +92,29 @@ public class BookService {
         return bookResponseDtoList;
     }
 
+
+    public List<BookResponseDto> getIssuedBookByCardId(int cardId) throws CardNotFoundException {
+
+        Optional<Card> optionalCard = cardRepository.findById(cardId);
+
+        if (optionalCard.isPresent()) {
+            Card card = optionalCard.get();
+            List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
+
+            for (Book book : card.getBooksIssued()) {
+                BookResponseDto bookResponseDto = BookConvertor.convertEntityToDto(book);
+
+                bookResponseDto.setAvailable((book.getNoOfBookAvailable()) > 0);
+
+                bookResponseDtoList.add(bookResponseDto);
+            }
+            return bookResponseDtoList;
+        }
+        else {
+            throw new CardNotFoundException("No such card: "+ cardId);
+        }
+
+
+    }
 
 }

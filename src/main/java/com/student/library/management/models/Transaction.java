@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transactions {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,10 +23,11 @@ public class Transactions {
 
     private int fine;
 
-    private String transactionId = UUID.randomUUID().toString();
+    private String transactionId;
 
     @CreationTimestamp
     private Date transactionDate;
+
     private boolean isIssuedOperation;
 
     @ManyToOne

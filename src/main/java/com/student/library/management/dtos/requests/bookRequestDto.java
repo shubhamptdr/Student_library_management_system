@@ -7,12 +7,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddBookRequestDto {
+public class bookRequestDto {
     private String bookName;
     private Genre genre;
     private int quantity;
     private String authorName;
     private String  country;
-    private double authorRating;
 
 }

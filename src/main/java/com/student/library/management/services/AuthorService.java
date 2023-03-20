@@ -1,6 +1,7 @@
 package com.student.library.management.services;
 
 import com.student.library.management.convertor.AuthorConvertor;
+import com.student.library.management.dtos.requests.AuthorRequestDto;
 import com.student.library.management.dtos.responses.AuthorResponseDto;
 import com.student.library.management.models.Author;
 import com.student.library.management.repositories.AuthorRepository;
@@ -25,4 +26,24 @@ public class AuthorService {
 
         return authorResponseDtoList;
     }
+
+    public String addAuthor(AuthorRequestDto authorRequestDto) {
+
+        List<Author> authorList = authorRepository.findByName(authorRequestDto.getName().toLowerCase());
+
+        if (!authorList.isEmpty() && authorList.stream().anyMatch(author -> author.getCountry().equals(authorRequestDto.getCountry().toLowerCase()))) {
+            return "Author already present";
+        }
+
+        Author newAuthor = Author.builder()
+                .name(authorRequestDto.getName().toLowerCase())
+                .rating(authorRequestDto.getRating())
+                .country(authorRequestDto.getCountry().toLowerCase())
+                .build();
+        authorRepository.save(newAuthor);
+
+
+        return "Author added successfully";
+    }
+
 }

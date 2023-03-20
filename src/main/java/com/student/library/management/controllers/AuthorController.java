@@ -1,11 +1,10 @@
 package com.student.library.management.controllers;
 
+import com.student.library.management.dtos.requests.AuthorRequestDto;
 import com.student.library.management.dtos.responses.AuthorResponseDto;
 import com.student.library.management.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +18,11 @@ public class AuthorController {
     @GetMapping("/")
     public List<AuthorResponseDto> getAllAuthor(){
         return authorService.getAllAuthor();
+    }
+
+    @PostMapping("/")
+    public String addAuthor(@RequestBody AuthorRequestDto authorRequestDto){
+        return authorService.addAuthor(authorRequestDto);
     }
 
 }

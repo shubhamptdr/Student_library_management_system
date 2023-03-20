@@ -6,7 +6,7 @@ The Student Library Management System is a web-based application built using the
 Hibernate ORM, and JPA (Java Persistence API). The system is designed to manage all library operations, including adding books, 
 adding students, issuing and returning books, and locating books in the library.
 
-The application consists of 15+ RESTful APIs that are designed to be user-friendly and easy to use. These APIs include obtaining transactions, 
+The application consists of 15+ RESTful APIs that are designed to be user-friendly and easy to use. These APIs include obtaining transaction, 
 adding books, adding students, locating books, issuing books, and returning books.
 
 The project is structured using Data Transfer Objects (DTOs) and Model-View-Controller (MVC) architecture. This structure enables

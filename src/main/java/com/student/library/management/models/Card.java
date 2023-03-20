@@ -34,7 +34,7 @@ public class Card {
     // child class foreign key wrt to primary key of parent class i.e. Student
     @OneToOne
     @JoinColumn
-    private Student studentVariableName; // this variable used in parent class
+    private Student student; // this variable used in parent class
 
 
     @ManyToMany(mappedBy = "listOfCards",cascade = CascadeType.ALL) // Card is parent wrt Book
@@ -42,7 +42,7 @@ public class Card {
 
 
     @OneToMany(mappedBy = "card",cascade = CascadeType.ALL)
-    private List<Transactions> listOfTransaction = new ArrayList<>();
+    private List<Transaction> listOfTransaction = new ArrayList<>();
 
 
 }

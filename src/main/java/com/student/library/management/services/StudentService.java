@@ -9,6 +9,7 @@ import com.student.library.management.models.Card;
 import com.student.library.management.models.Student;
 import com.student.library.management.dtos.requests.AddStudentRequestDto;
 import com.student.library.management.dtos.responses.StudentResponseDto;
+import com.student.library.management.repositories.CardRepository;
 import com.student.library.management.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    CardRepository cardRepository;
+
     public String createStudent( AddStudentRequestDto addStudentRequestDto) throws ResourceAlreadyExistsException {
 
 
@@ -32,12 +36,12 @@ public class StudentService {
             // create card entity
             Card card = Card.builder()
                     .cardStatus(CardStatus.ACTIVATED)
-                    .studentVariableName(student)
+                    .student(student)
                     .build();
 
-            //by cascading effect, child will automatically be saved.
-            student.setCard(card);
+            //we can save both by cascading effect, child will automatically be saved when save parent.
             studentRepository.save(student);
+            cardRepository.save(card);
 
         }catch (Exception e){
             throw new ResourceAlreadyExistsException("Student already exists");

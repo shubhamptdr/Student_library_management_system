@@ -51,7 +51,7 @@ public class TransactionService {
                 .book(book)
                 .card(card)
                 .build();
-t
+
         transaction.setIssuedOperation(true);
 
         if(!book.isAvailable()){
@@ -98,6 +98,8 @@ t
         transaction.setTransactionStatus(TransactionStatus.PENDING);
         transaction.setTransactionId(UUID.randomUUID().toString());
 
+
+        
 
         if(card.getCardStatus() != CardStatus.ACTIVATED){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
